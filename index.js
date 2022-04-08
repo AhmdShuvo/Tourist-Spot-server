@@ -48,7 +48,7 @@ const port = process.env.PORT || 9000;
     
           
             
-    
+            //  POST orders ////
             app.post('/orders',async(req,res)=>{
     
                    const userData=req.body;
@@ -56,7 +56,9 @@ const port = process.env.PORT || 9000;
                    const result= await ordersCollection.insertOne(userData)
                      res.json(result)
     
-            });
+            }); 
+
+            // POST NEW PLACES  //
     
             app.post("/places",async(req,res)=>{
     
@@ -66,14 +68,18 @@ const port = process.env.PORT || 9000;
                 
                 res.send(result)
             })
-    
+       
+            // GET ALL ORDERS ///
             app.get('/orders',async(req,res)=>{
     
                 const cursor=ordersCollection.find({})
                 const users=await cursor.toArray()
             
                 res.json(users)
-            })
+            }) 
+
+
+            // CHANGE STATUS ///
     
             app.put("/order/:id",async(req,res)=>{
                 const id=req.params.id;
@@ -95,7 +101,9 @@ const port = process.env.PORT || 9000;
     
                res.json(result)
             })
-                           
+                         
+            
+            // DELETE ANY ORDER ////
             app.delete("/order/:id",async(req,res)=>{
     
                 const id=req.params.id;
@@ -105,7 +113,8 @@ const port = process.env.PORT || 9000;
     
                 res.send(result)
             })
-           
+            
+            // GET SPECIFIC ORDER by user //
     
             app.get("/orders/:email",async (req,res)=>{
     
@@ -117,8 +126,27 @@ const port = process.env.PORT || 9000;
            
                 res.send(result)
             });
+              
+            // GET SPECIFIC ORDER //
+
+            app.get("/order/:id", async (req,res)=>{
+    
+                const id=req.params.id;
+    
+                const query={_id:Objectid(id)}
+    
+    
+                const result= await ordersCollection.find(query).toArray();
+                res.json(result)
+    
+     
+            })
+           
+    
+    
             
-  
+    
+    
         } finally {
             // Ensures that the client will close when you finish/error
             //   await client.close();
