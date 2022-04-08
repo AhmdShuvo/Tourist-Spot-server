@@ -96,7 +96,15 @@ const port = process.env.PORT || 9000;
                res.json(result)
             })
                            
-       
+            app.delete("/order/:id",async(req,res)=>{
+    
+                const id=req.params.id;
+    
+                const query={_id: Objectid(id)}
+                const result=await ordersCollection.deleteOne(query);
+    
+                res.send(result)
+            })
            
     
             app.get("/orders/:email",async (req,res)=>{
