@@ -33,7 +33,7 @@ const port = process.env.PORT || 9000;
             console.log('connected to db');
             const database = client.db('TouristSpot');
             const placesCollection = database.collection('places');
-            const usersCollection = database.collection('users');
+            const ordersCollection = database.collection('orders');
     
                     //    get data from data base to url ///
             app.get('/places',async(req,res)=>{
@@ -53,7 +53,7 @@ const port = process.env.PORT || 9000;
     
                    const userData=req.body;
                    
-                   const result= await usersCollection.insertOne(userData)
+                   const result= await ordersCollection.insertOne(userData)
                      res.json(result)
     
             });
@@ -69,7 +69,7 @@ const port = process.env.PORT || 9000;
     
             app.get('/orders',async(req,res)=>{
     
-                const cursor=usersCollection.find({})
+                const cursor=ordersCollection.find({})
                 const users=await cursor.toArray()
             
                 res.json(users)
@@ -89,22 +89,14 @@ const port = process.env.PORT || 9000;
                 },
               };
     
-              const result= await usersCollection.updateMany(filter,updateDoc,options)
+              const result= await ordersCollection.updateMany(filter,updateDoc,options)
              
     
     
                res.json(result)
             })
                            
-            app.delete("/order/:id",async(req,res)=>{
-    
-                const id=req.params.id;
-    
-                const query={_id: Objectid(id)}
-                const result=await usersCollection.deleteOne(query);
-    
-                res.send(result)
-            })
+       
            
     
             app.get("/orders/:email",async (req,res)=>{
@@ -113,29 +105,12 @@ const port = process.env.PORT || 9000;
              
               const query={Email:email.email}
     
-               const result= await usersCollection.find(query).toArray()
+               const result= await ordersCollection.find(query).toArray()
            
                 res.send(result)
             });
             
-            app.get("/order/:id", async (req,res)=>{
-    
-                const id=req.params.id;
-    
-                const query={_id:Objectid(id)}
-    
-    
-                const result= await usersCollection.find(query).toArray();
-                res.json(result)
-    
-     
-            })
-           
-    
-    
-            
-    
-    
+  
         } finally {
             // Ensures that the client will close when you finish/error
             //   await client.close();
